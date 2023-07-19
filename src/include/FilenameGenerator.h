@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-namespace Shooter 
+namespace Shooter
 {
 class FilenameGenerator
 {
@@ -8,8 +8,7 @@ class FilenameGenerator
     FilenameGenerator(const std::string &dir, const std::string &tag);
 
     void nextBatch();
-    std::string nextFile(const std::string& postTag = "");
-
+    std::string nextFile(const std::string &postTag = "");
 
   private:
     std::string dir;
@@ -18,4 +17,4 @@ class FilenameGenerator
     unsigned batch{0};
     unsigned frame{0};
 };
-}
+} // namespace Shooter

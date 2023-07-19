@@ -1,8 +1,8 @@
 #pragma once
-  
+
+#include "TEvent.h"
 #include "libindi/baseclient.h"
 #include "libindi/basedevice.h"
-#include "TEvent.h"
 
 #include <chrono>
 #include <ratio>
@@ -18,7 +18,7 @@ class Client : public INDI::BaseClient
 
     Client();
 
-    void initCamera(const std::string& name);
+    void initCamera(const std::string &name);
 
     void setGain(double gain);
 
@@ -27,11 +27,10 @@ class Client : public INDI::BaseClient
     BlobT getBlob(ExposureT delay);
 
   private:
-
     void onNewDevice(INDI::BaseDevice device);
     void watchConnection(INDI::Property property);
     void watchBlob(INDI::PropertyBlob property);
-    void log(const std::string& message) const;
+    void log(const std::string &message) const;
 
     std::string name;
     INDI::BaseDevice ccd;

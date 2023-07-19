@@ -9,18 +9,15 @@ namespace Shooter
 {
 class SimpleEvent
 {
-    public:
+  public:
     using CallbackT = std::function<void()>;
 
-    SimpleEvent()
-    : flag(false)
-    {}
+    SimpleEvent() : flag(false) {}
 
-    void raise(const CallbackT& callback = [](){})
+    void raise(const CallbackT &callback = []() {})
     {
         std::unique_lock l(mutex);
-        if (flag)
-        {
+        if (flag) {
             throw std::runtime_error("SimpleEvent raised twice");
         }
         flag = true;
@@ -29,22 +26,23 @@ class SimpleEvent
         cv.notify_all();
     }
 
-    void wait(const CallbackT& callback = [](){})
+    void wait(const CallbackT &callback = []() {})
     {
         std::unique_lock l(mutex);
-        cv.wait(l, [this]{return flag;});
+        cv.wait(l, [this] { return flag; });
         callback();
         flag = false;
         l.unlock();
         cv.notify_all();
     }
 
-    template< class Rep, class Period >
-    bool wait_for(const std::chrono::duration<Rep, Period>& delay,
-        const CallbackT& callback = [](){})
+    template <class Rep, class Period>
+    bool wait_for(
+        const std::chrono::duration<Rep, Period> &delay,
+        const CallbackT &callback = []() {})
     {
         std::unique_lock l(mutex);
-        const auto result = cv.wait_for(l, delay, [this]{return flag;});
+        const auto result = cv.wait_for(l, delay, [this] { return flag; });
         callback();
         flag = false;
         l.unlock();
@@ -53,10 +51,10 @@ class SimpleEvent
     }
 
   private:
-    SimpleEvent(const SimpleEvent&) = delete;
-    SimpleEvent(SimpleEvent&&) = delete;
-    SimpleEvent& operator=(const SimpleEvent&) = delete;
-    SimpleEvent& operator=(SimpleEvent&&) = delete;
+    SimpleEvent(const SimpleEvent &) = delete;
+    SimpleEvent(SimpleEvent &&) = delete;
+    SimpleEvent &operator=(const SimpleEvent &) = delete;
+    SimpleEvent &operator=(SimpleEvent &&) = delete;
 
     std::condition_variable cv;
     std::mutex mutex;
@@ -64,41 +62,41 @@ class SimpleEvent
 };
 
 template <typename TData>
-class TEvent: public SimpleEvent
+class TEvent : public SimpleEvent
 {
   public:
     TEvent() = default;
 
-    void raise(const TData& src)
+    void raise(const TData &src)
     {
-        SimpleEvent::raise([this, src](){ data = src; });
+        SimpleEvent::raise([this, src]() { data = src; });
     }
 
     TData wait()
     {
         TData result{};
-        SimpleEvent::wait([this, &result](){ result = data; });
+        SimpleEvent::wait([this, &result]() { result = data; });
         return result;
     }
 
-    template< class Rep, class Period >
-    TData wait_for(const std::chrono::duration<Rep, Period>& delay)
+    template <class Rep, class Period>
+    TData wait_for(const std::chrono::duration<Rep, Period> &delay)
     {
         TData result{};
-        if (!SimpleEvent::wait_for(delay, [this, &result](){ result = data; }))
-        {
+        if (!SimpleEvent::wait_for(delay,
+                                   [this, &result]() { result = data; })) {
             throw std::runtime_error("Wait for TEvent completion timed out");
         }
         return result;
     }
 
   private:
-    TEvent(const TEvent&) = delete;
-    TEvent(TEvent&&) = delete;
-    TEvent& operator=(const TEvent&) = delete;
-    TEvent& operator=(TEvent&&) = delete;
+    TEvent(const TEvent &) = delete;
+    TEvent(TEvent &&) = delete;
+    TEvent &operator=(const TEvent &) = delete;
+    TEvent &operator=(TEvent &&) = delete;
 
     TData data;
 };
 
-}
+} // namespace Shooter

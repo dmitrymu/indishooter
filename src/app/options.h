@@ -3,24 +3,22 @@
 
 #pragma once
 
-#include <string>
 #include <cstdint>
+#include <string>
 
 namespace Shooter
 {
-struct Options
-{
-    bool printHelp {false};
-    bool listDevices {false};
+struct Options {
+    bool printHelp{false};
+    bool listDevices{false};
 
-    struct ShootParams
-    {
+    struct ShootParams {
         double exposure{1.0};
         double gain{0};
         double offset{0};
         unsigned count{1};
         double delay{0};
-        unsigned repeat{1}; 
+        unsigned repeat{1};
     } shootParams;
 
     std::string dir;
@@ -31,8 +29,8 @@ struct Options
     std::string cameraName{};
 
     // Parse option, exit on '--help'
-    void Parse(int argc, const char** argv);
+    void Parse(int argc, const char **argv);
 };
-}
+} // namespace Shooter
 
 #endif

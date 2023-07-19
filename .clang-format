@@ -1,0 +1,19 @@
+# options: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+BasedOnStyle: LLVM
+IndentWidth: 4
+# Must be 80 characters or less!
+ColumnLimit: 80
+# spaces, not tabs!
+UseTab: Never
+# if (x) doStuff()  is not allowed, bad style
+AllowShortIfStatementsOnASingleLine: false
+#
+AlwaysBreakTemplateDeclarations: Yes
+# 
+AlignTrailingComments: true
+# Break long parameter list
+BinPackParameters: false
+#
+BreakBeforeBraces: Linux
+# Empty lines between functions
+SeparateDefinitionBlocks: Always
