@@ -28,22 +28,35 @@ void listDevices(Shooter::Client& client)
     }
 }
 
+/** Format exposure and gain as a part of filename.
+*/
 std::string formatPostTag(const Options::ShootParams& params)
 {
     auto expString = std::format("{:f}", params.exposure);
+
+    // Replace decimal dot with underscore: 1.5 s -> e1_5000
     const auto point = expString.find(".");
     if (point != std::string::npos)
     {
         expString.replace(point, 1, "_");
     } 
+
     if (point)
     {
+        // Remove trailing zeroes after decimal point: e1_5000 -> e1_5
         while(expString.length() > 0 && expString.back() == '0')
+        {
+            expString.pop_back();
+        }
+
+        // Remove trailing underscore: 2 s -> e2_0000 -> e2_ -> e2
+        if (expString.length() > 0 && expString.back() == '_')
         {
             expString.pop_back();
         }
     }
 
+    // Assume gain is integer.
     return std::format("e{}_g{}", expString, (unsigned)params.gain);
 }
 
