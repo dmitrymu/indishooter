@@ -8,6 +8,11 @@
 using namespace Shooter;
 namespace po = boost::program_options;
 
+namespace 
+{
+    const char VERSION_MESSAGE[] = "indishooter version " PROJECT_VERISON; 
+}
+
 void Options::Parse(int argc, const char **argv)
 {
     // Declare the supported options.
@@ -15,6 +20,7 @@ void Options::Parse(int argc, const char **argv)
     // clang-format off
     desc.add_options()
         ("help,h", "print help message")
+        ("version,v", "print program version")
         ("list,l", po::bool_switch(&listDevices), "list devices instead of shooting")
         ("host,H", po::value<std::string>(&indiHost)->default_value("localhost"), "INDI host")
         ("port,P", po::value<uint16_t>(&indiPort)->default_value(7624), "INDI port")
@@ -33,8 +39,11 @@ void Options::Parse(int argc, const char **argv)
     po::store(po::parse_command_line(argc, argv, desc), vm);
     po::notify(vm);
 
-    if (vm.count("help")) {
-        std::cerr << desc << std::endl;
-        exit(EXIT_FAILURE);
+    if (vm.count("version")) {
+        std::cerr << VERSION_MESSAGE << std::endl;
+        exit(EXIT_SUCCESS);
+    } else if (vm.count("help")) {
+        std::cerr << VERSION_MESSAGE << '\n' << desc << std::endl;
+        exit(EXIT_SUCCESS);
     }
 }
