@@ -1,0 +1,6 @@
+# CMake files
+build/
+.cache/
+
+# Visual Studo Code settings
+.vscode/
