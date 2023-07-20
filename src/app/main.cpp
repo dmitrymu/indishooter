@@ -1,3 +1,5 @@
+// Public domain software (CC0).
+
 #include "options.h"
 
 #include <chrono>

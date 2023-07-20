@@ -1,3 +1,5 @@
+// Public domain software (CC0).
+
 #include "ShooterClient.h"
 #include "basedevice.h"
 #include "indiccd.h"

@@ -1,5 +1,4 @@
-#ifndef _INDISHOOTER_OPTIONS_H
-#define _INDISHOOTER_OPTIONS_H
+// Public domain software (CC0).
 
 #pragma once
 
@@ -55,5 +54,3 @@ struct Options {
     void Parse(int argc, const char **argv);
 };
 } // namespace Shooter
-
-#endif

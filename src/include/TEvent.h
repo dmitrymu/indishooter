@@ -1,3 +1,5 @@
+// Public domain software (CC0).
+
 #pragma once
 
 #include <condition_variable>
