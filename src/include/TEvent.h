@@ -7,13 +7,18 @@
 
 namespace Shooter
 {
+/** An event with some associated data.
+*/
 class SimpleEvent
 {
   public:
+    /// Callback to handle the data.
     using CallbackT = std::function<void()>;
 
+    /// Create event in un-signalled state.
     SimpleEvent() : flag(false) {}
 
+    /// Atomically execute callback and raise the event.
     void raise(const CallbackT &callback = []() {})
     {
         std::unique_lock l(mutex);
@@ -26,6 +31,8 @@ class SimpleEvent
         cv.notify_all();
     }
 
+    /// Wait infinitely until the event is raised, then atomically 
+    /// execute callback and clear the event state.
     void wait(const CallbackT &callback = []() {})
     {
         std::unique_lock l(mutex);
@@ -36,6 +43,8 @@ class SimpleEvent
         cv.notify_all();
     }
 
+    /// Wait for specific time until the event is raised then atomically 
+    /// execute callback and clear the event state.
     template <class Rep, class Period>
     bool wait_for(
         const std::chrono::duration<Rep, Period> &delay,
@@ -61,6 +70,8 @@ class SimpleEvent
     bool flag;
 };
 
+
+/// Use SimpleEvent to associate data with the event.
 template <typename TData>
 class TEvent : public SimpleEvent
 {

@@ -2,12 +2,24 @@
 #include <string>
 namespace Shooter
 {
+/** Generate unique file names.
+
+    File name pattern is 
+    {tag}_{post_tag}_{batch}_{frame}.fits
+*/  
 class FilenameGenerator
 {
   public:
+    /** Initialize batch and frame counts, create directory if not exist.
+
+        Throws if @dir already exists and is not empty.
+    */
     FilenameGenerator(const std::string &dir, const std::string &tag);
 
+    /// Advance batch counter
     void nextBatch();
+
+    /// Advance frame counter and return full path to the next file.
     std::string nextFile(const std::string &postTag = "");
 
   private:

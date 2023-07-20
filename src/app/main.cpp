@@ -17,6 +17,9 @@
 using namespace Shooter;
 using namespace std::chrono_literals;
 
+namespace
+{   // TODO: move list and shoot functions to library?
+
 void listDevices(Shooter::Client &client)
 {
     std::this_thread::sleep_for(.1s);
@@ -39,7 +42,7 @@ std::string formatPostTag(const Options::ShootParams &params)
         expString.replace(point, 1, "_");
     }
 
-    if (point) {
+    if (point != std::string::npos) {
         // Remove trailing zeroes after decimal point: e1_5000 -> e1_5
         while (expString.length() > 0 && expString.back() == '0') {
             expString.pop_back();
@@ -51,10 +54,12 @@ std::string formatPostTag(const Options::ShootParams &params)
         }
     }
 
-    // Assume gain is integer.
+    // Assume gain is an integer.
     return std::format("e{}_g{}", expString, (unsigned)params.gain);
 }
 
+/** Shoot a batch of photos with the same gain and exposure.
+*/
 void shootBatch(Shooter::Client &client,
                 FilenameGenerator &fg,
                 const Options::ShootParams &params)
@@ -72,6 +77,8 @@ void shootBatch(Shooter::Client &client,
     }
 }
 
+/** Shoot batchers in sequence with the specified interval.
+*/
 void shoot(Shooter::Client &client,
            FilenameGenerator &fg,
            const Options::ShootParams &params)
@@ -87,6 +94,8 @@ void shoot(Shooter::Client &client,
         shootBatch(client, fg, params);
     }
 }
+
+} // namespace
 
 int main(int argc, const char **argv)
 {
